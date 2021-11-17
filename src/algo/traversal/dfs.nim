@@ -108,26 +108,25 @@ iterator dfsLabeledEdges*(
     for start in nodes:
         if start in visited:
             continue
-        visited.incl(start)
         yield (start, start, "forward")
+        visited.incl(start)
         var stack: seq[tuple[node: Node, depthLimit: int, neighbors: iterator(): Node]]
         stack.add((start, depthLimit0, dg.getNeighborsIterator(start)))
         while len(stack) != 0:
             var parent: Node
             var depthNow: int
             var children: iterator(): Node
-            (parent, depthNow, children) = stack[^1]
+            (parent, depthNow, children) = pop(stack)
             for child in children:
-                if child notin visited:
+                if child in visited:
                     yield (parent, child, "nontree")
                 else:
                     yield (parent, child, "forward")
                     visited.incl(child)
                     if 1 < depthNow:
                         stack.add((child, depthNow - 1, dg.getNeighborsIterator(child)))
-            discard pop(stack)
             if len(stack) != 0:
-                yield (stack[^1][0], parent, "reverse")
+                yield (parent, stack[^1][0], "reverse")
         yield (start, start, "reverse")
 
 proc dfsPreorderNodes*(
