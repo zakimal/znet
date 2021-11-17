@@ -4,18 +4,19 @@ import sequtils
 import strformat
 import tables
 import system
+import math
 
 import ../../graph
 import ../../readwrite
 
-proc pagerankPowerIteration(
+proc katzCentrality(
     dg: ref DirectedGraph,
-    alpha: float = 0.85,
-    personalization: Table[Node, float] = initTable[Node, float](),
-    maxIter: int = 100,
+    alpha: float = 0.1,
+    beta: float = 1.0,
+    maxIter: int = 1000,
     tol: float = 1.0e-6,
     nstart: Table[Node, float] = initTable[Node, float](),
-    dangling: Table[Node, int] = initTable[Node, int]()
+    normalized: bool = true
 ): Table[Node, float] =
     if len(dg) == 0:
         return initTable[Node, float]()
@@ -25,38 +26,13 @@ proc pagerankPowerIteration(
     var x: Table[Node, float] = initTable[Node, float]()
     if len(nstart) == 0:
         for node in dg.nodes():
-            x[node] = 1.0 / float(N)
+            x[node] = 0.0
     else:
-        var s: float = 0
-        for val in nstart.values():
-            s += val
-        for (node, val) in nstart.pairs():
-            x[node] = val / float(s)
+        x = nstart
 
-    var p: Table[Node, float] = initTable[Node, float]()
-    if len(personalization) == 0:
-        for node in dg.nodes():
-            p[node] = 1.0 / float(N)
-    else:
-        var s: float = 0
-        for val in personalization.values():
-            s += val
-        for (node, val) in personalization.pairs():
-            x[node] = val / float(s)
-
-    var danglingWeights: Table[Node, float] = initTable[Node, float]()
-    if len(danglingWeights) == 0:
-        danglingWeights = p
-    else:
-        var s: float = 0
-        for val in dangling.values():
-            s += float(val)
-        for (node, val) in dangling.pairs():
-            x[node] = float(val) / float(s)
-    var danglingNodes: seq[Node] = @[]
+    var b: Table[Node, float] = initTable[Node, float]()
     for node in dg.nodes():
-        if dg.outdegree(node) == 0:
-            danglingNodes.add(node)
+        b[node] = beta
 
     var currentIter: int = 0
     while currentIter < maxIter:
@@ -64,39 +40,33 @@ proc pagerankPowerIteration(
         x = initTable[Node, float]()
         for key in xlast.keys():
             x[key] = 0.0
-
-        var dangleSum: float = 0.0
-        for node in danglingNodes:
-            dangleSum += xlast[node]
-        dangleSum *= alpha
-
         for n in x.keys():
             for nbr in dg.neighbors(n):
-                x[nbr] += alpha * xlast[n] / float(dg.outdegree(n))
-            x[n] += dangleSum * danglingWeights.getOrDefault(n, 0.0) + (1.0 - alpha) * p.getOrDefault(n, 0.0)
+                x[nbr] += xlast[n]
+        for n in x.keys():
+            x[n] = alpha * x[n] + b[n]
 
         var err: float = 0.0
         for n in x.keys():
             err += abs(x[n] - xlast[n])
+
+        var s: float = 0.0
         if err < float(N) * tol:
+            if normalized:
+                for val in x.values():
+                    s += val * val
+                if s != 0.0:
+                    s = 1.0 / sqrt(s)
+                else:
+                    s = 1.0
+            else:
+                s = 1.0
+            for n in x.keys():
+                x[n] *= s
             return x
         else:
             currentIter += 1
     return x
-
-
-proc pagerank*(
-    dg: ref DirectedGraph,
-    alpha: float = 0.85,
-    personalization: Table[Node, float] = initTable[Node, float](),
-    maxIter: int = 100,
-    tol: float = 1.0e-6,
-    nstart: Table[Node, float] = initTable[Node, float](),
-    dangling: Table[Node, int] = initTable[Node, int]()
-): Table[Node, float] =
-    return pagerankPowerIteration(
-        dg, alpha, personalization, maxIter, tol, nstart, dangling
-    )
 
 when isMainModule:
     var G = newDirectedGraph()
@@ -179,4 +149,8 @@ when isMainModule:
     G.addEdge((31, 33))
     G.addEdge((32, 33))
 
-    echo(G.pagerank())
+    let ret = G.katzCentrality()
+    let trueKatzs = {0: 0.1304033914867838, 1: 0.14344373063546217, 2: 0.1577881036990084, 3: 0.17356691406890923, 4: 0.14344373063546217, 5: 0.14344373063546217, 6: 0.1721324767625546, 7: 0.19092360547580015, 8: 0.159222541005363, 10: 0.1721324767625546, 11: 0.14344373063546217, 12: 0.1608004220423531, 13: 0.19092360547580015, 17: 0.1577881036990084, 19: 0.1577881036990084, 21: 0.1577881036990084, 31: 0.18675069694822305, 30: 0.1606700186508663, 9: 0.14618220185668462, 27: 0.17226288015404137, 28: 0.14618220185668462, 32: 0.2907369693876142, 16: 0.16196101222658546, 33: 0.398406094409375, 14: 0.1304033914867838, 15: 0.1304033914867838, 18: 0.1304033914867838, 20: 0.1304033914867838, 22: 0.1304033914867838, 23: 0.1304033914867838, 25: 0.15648406978414053, 29: 0.15648406978414053, 24: 0.1304033914867838, 26: 0.1304033914867838}.toTable()
+    for (node, val) in ret.pairs():
+        echo(node)
+        echo(fmt"got {val}, expected {trueKatzs[node]}, diff={trueKatzs[node] - val}")
