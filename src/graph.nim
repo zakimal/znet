@@ -444,6 +444,8 @@ proc `-=`*(g: Graph, edges: openArray[Edge]) =
 # proc `-`(g0: Graph, g1: Graph): Graph
 # proc `*`(g0: Graph, g1: Graph): Graph
 
+# TODO: should use method?
+
 proc addNode*(dg: DirectedGraph, node: Node) =
     if node notin dg.adj:
         if node == None:
@@ -580,6 +582,31 @@ proc edgeSet*(dg: DirectedGraph): HashSet[Edge] =
             ret.incl((u, v))
     return ret
 
+proc neighbors*(dg: DirectedGraph, n: Node): seq[Node] =
+    var ret: seq[Node] = newSeq[Node]()
+    if n notin dg.adj:
+        var e = ZNetError()
+        e.msg = fmt"The node {n} is not in the graph"
+        raise e
+    for nbr in dg.adj[n]:
+        ret.add(nbr)
+    ret.sort()
+    return ret
+
+proc neighborIterator*(dg: DirectedGraph, n: Node): iterator: Node =
+    return iterator: Node =
+        for nbr in dg.neighbors(n):
+            yield nbr
+
+proc neighborSet*(dg: DirectedGraph, n: Node): HashSet[Node] =
+    var ret = initHashSet[Node]()
+    for nbr in dg.neighbors(n):
+        ret.incl(nbr)
+    return ret
+
+proc neighborSeq*(dg: DirectedGraph, n: Node): seq[Node] =
+    return dg.neighbors(n)
+
 proc successors*(dg: DirectedGraph, node: Node): seq[Node] =
     try:
         var ret = dg.adj[node].toSeq()
@@ -634,6 +661,21 @@ proc predecessorSeq*(dg: DirectedGraph, node: Node): seq[Node] =
 proc pred*(dg: DirectedGraph): Table[Node, HashSet[Node]] =
     return dg.pred
 
+proc degree*(dg: DirectedGraph): Table[Node, int] =
+    var ret = initTable[Node, int]()
+    for node in dg.nodeSeq():
+        ret[node] = dg.adj[node].len()
+    return ret
+
+proc degree*(dg: DirectedGraph, node: Node): int =
+    return dg.adj[node].len()
+
+proc degree*(dg: DirectedGraph, nbunch: seq[Node]): seq[tuple[node: Node, degree: int]] =
+    var ret = newSeq[tuple[node: Node, degree: int]]()
+    for node in dg.nodeSeq():
+        ret.add((node, dg.adj[node].len()))
+    return ret
+
 proc indegree*(dg: DirectedGraph): Table[Node, int] =
     var ret = initTable[Node, int]()
     for node in dg.nodeSeq():
@@ -667,6 +709,14 @@ proc size*(dg: DirectedGraph): int =
 # TODO:
 # proc size*(dg: DirectedGraph, weight: string = ""): int =
 #     return
+
+proc numberOfEdges*(dg: DirectedGraph): int =
+    return dg.size()
+
+proc numberOfEdges*(dg: DirectedGraph, u, v: Node): int =
+    if v in dg.neighborSet(u):
+        return 1
+    return 0
 
 proc toUndirected*(dg: DirectedGraph): Graph =
     var ret = newGraph()
