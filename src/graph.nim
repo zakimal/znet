@@ -285,6 +285,20 @@ proc degree*(g: Graph, nbunch: seq[Node]): seq[tuple[node: Node, degree: int]] =
         ret.add((node, g.adj[node].len()))
     return ret
 
+proc degreeHistogram*(g: Graph): seq[int] =
+    var counts: Table[int, int] = initTable[int, int]()
+    var maxDegree: int = 0
+    for degree in g.degree().values():
+        maxDegree = max(maxDegree, degree)
+        if degree notin counts:
+            counts[degree] = 1
+        else:
+            counts[degree] += 1
+    var ret: seq[int] = newSeq[int](maxDegree)
+    for (degree, freq) in counts.pairs():
+        ret[degree] = freq
+    return ret
+
 proc size*(g: Graph): int =
     var ret = 0
     for degree in g.degree().values():
@@ -302,6 +316,16 @@ proc numberOfEdges*(g: Graph, u, v: Node): int =
     if v in g.neighborSet(u):
         return 1
     return 0
+
+proc density*(g: Graph): float =
+    var n = g.numberOfNodes()
+    var m = g.numberOfEdges()
+    if m == 0 or n <= 1:
+        return 0.0
+    var d = float(m) / ((float(n) * float((n - 1))))
+    if not g.isDirected:
+        d *= 2.0
+    return d
 
 proc copy*(g: Graph): Graph =
     var ret = newGraph()
@@ -345,6 +369,129 @@ proc edgeSubgraph*(g: Graph, edges: HashSet[Edge]): Graph =
         if g.hasEdge(edge):
             ret.addEdge(edge)
     return ret
+
+proc info*(g: Graph, node: Node): string =
+    if node notin g.nodes:
+        var e = ZNetError()
+        e.msg = fmt"The node {node} not in the graph"
+        raise e
+    var ret = fmt"Node {node} has following properties:"
+    ret = ret & "\n"
+    ret = ret & fmt"Degree: {g.degree(node)}"
+    ret = ret & "\n"
+    ret = ret & fmt"Neighbors: {g.neighbors(node)}"
+    ret = ret & "\n"
+    return ret
+
+proc addStar*(g: Graph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    let centerNode = nodes[0]
+    g.addNode(centerNode)
+    for i in 1..<len(nodes):
+        g.addEdge(centerNode, nodes[i])
+
+proc addPath*(g: Graph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    for i in 0..<len(nodes)-1:
+        g.addEdge(nodes[i], nodes[i+1])
+
+proc addCycle*(g: Graph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    for i in 0..<len(nodes)-1:
+        g.addEdge(nodes[i], nodes[i+1])
+    g.addEdge(nodes[0], nodes[^1])
+
+proc allNeighbors(g: Graph, node: Node): iterator: Node =
+    return g.neighborIterator(node)
+
+proc nonNeighbors(g: Graph, node: Node): iterator: Node =
+    var nbrs = initHashSet[Node]()
+    nbrs.incl(node)
+    for nbr in g.neighborIterator(node):
+        nbrs.incl(nbr)
+    var nonNbrs = g.nodeSet() - nbrs
+    return iterator: Node =
+        for nonNbr in nonNbrs:
+            yield nonNbr
+
+proc commonNeighbors(g: Graph, u, v: Node): iterator: Node =
+    if g.isDirected:
+        var e = ZNetError()
+        e.msg = "Not implemented for directed graph"
+        raise e
+    if u notin g.nodes():
+        var e = ZNetError()
+        e.msg = fmt"The Node {u} is not in the graph"
+        raise e
+    if v notin g.nodes:
+        var e = ZNetError()
+        e.msg = fmt"The Node {v} is not in the graph"
+        raise e
+    var commonNbrs = g.neighborSet(u) * g.neighborSet(v)
+    return iterator: Node =
+        for commonNbr in commonNbrs:
+            yield commonNbr
+
+proc nonEdges(g: Graph): iterator: Edge =
+    if g.isDirected:
+        var ret: seq[Edge] = newSeq[Edge]()
+        for u in g.nodes():
+            for v in g.nonNeighbors(u):
+                ret.add((u, v))
+        return iterator: Edge =
+            for edge in ret:
+                yield edge
+    else:
+        var nodes = g.nodeSet()
+        var ret: seq[Edge] = newSeq[Edge]()
+        while len(nodes) != 0:
+            var u = nodes.pop()
+            for v in nodes - g.neighborSet(u):
+                ret.add((u, v))
+        return iterator: Edge =
+            for edge in ret:
+                yield edge
+
+proc selfloopEdges(g: Graph): iterator: Edge =
+    var ret: seq[Edge] = newSeq[Edge]()
+    for edge in g.edges():
+        if edge.u == edge.v:
+            ret.add(edge)
+    return iterator: Edge =
+        for edge in ret:
+            yield edge
+
+proc numberOfSelfloop(g: Graph): int =
+    var ret = 0
+    for edge in g.edges():
+        if edge.u == edge.v:
+            ret += 1
+    return ret
+
+proc nodesWithSelfloop(g: Graph): iterator: Node =
+    var ret: seq[Node] = newSeq[Node]()
+    for edge in g.edges():
+        if edge.u == edge.v:
+            ret.add(edge.u)
+    return iterator: Node =
+        for node in ret:
+            yield node
+
+proc isPath(g: Graph, path: seq[Node]): bool =
+    if len(path) == 0 or len(path) == 1:
+        return true
+    for i in 0..<len(path)-1:
+        var n = path[i]
+        var nn = path[i+1]
+        if nn notin g.neighborSet(n):
+            return false
+    return true
+
+# TODO:
+# proc `$`*(g: Graph): string =
 
 proc `[]`*(g: Graph, node: Node): seq[Node] =
     return g.neighborSeq(node)
@@ -700,6 +847,20 @@ proc outdegree*(dg: DirectedGraph, node: Node): int =
 proc outdegree*(dg: DirectedGraph, nbunch: seq[Node]): seq[tuple[node: Node, degree: int]] =
     return dg.degree(nbunch)
 
+proc degreeHistogram*(dg: DirectedGraph): seq[int] =
+    var counts: Table[int, int] = initTable[int, int]()
+    var maxDegree: int = 0
+    for degree in dg.degree().values():
+        maxDegree = max(maxDegree, degree)
+        if degree notin counts:
+            counts[degree] = 1
+        else:
+            counts[degree] += 1
+    var ret: seq[int] = newSeq[int](maxDegree)
+    for (degree, freq) in counts.pairs():
+        ret[degree] = freq
+    return ret
+
 proc size*(dg: DirectedGraph): int =
     var ret = 0
     for degree in dg.outdegree().values():
@@ -717,6 +878,16 @@ proc numberOfEdges*(dg: DirectedGraph, u, v: Node): int =
     if v in dg.neighborSet(u):
         return 1
     return 0
+
+proc density*(dg: DirectedGraph): float =
+    var n = dg.numberOfNodes()
+    var m = dg.numberOfEdges()
+    if m == 0 or n <= 1:
+        return 0.0
+    var d = float(m) / ((float(n) * float((n - 1))))
+    if not dg.isDirected:
+        d *= 2.0
+    return d
 
 proc toUndirected*(dg: DirectedGraph): Graph =
     var ret = newGraph()
@@ -739,6 +910,118 @@ proc reverse*(dg: DirectedGraph, copy: bool): DirectedGraph =
     for edge in edges:
         dg.addEdge(edge.v, edge.u)
     return dg
+
+proc info*(dg: DirectedGraph, node: Node): string =
+    if node notin dg.nodes:
+        var e = ZNetError()
+        e.msg = fmt"The node {node} not in the graph"
+        raise e
+    var ret = fmt"Node {node} has following properties:"
+    ret = ret & "\n"
+    ret = ret & fmt"Degree: {dg.degree(node)}"
+    ret = ret & "\n"
+    ret = ret & fmt"Neighbors: {dg.neighbors(node)}"
+    ret = ret & "\n"
+    return ret
+
+proc addStar*(dg: DirectedGraph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    let centerNode = nodes[0]
+    dg.addNode(centerNode)
+    for i in 1..<len(nodes):
+        dg.addEdge(centerNode, nodes[i])
+
+proc addPath*(dg: DirectedGraph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    for i in 0..<len(nodes)-1:
+        dg.addEdge(nodes[i], nodes[i+1])
+
+proc addCycle*(dg: DirectedGraph, nodes: seq[Node]) =
+    if len(nodes) == 0:
+        return
+    for i in 0..<len(nodes)-1:
+        dg.addEdge(nodes[i], nodes[i+1])
+    dg.addEdge(nodes[0], nodes[^1])
+
+proc allNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
+    var predAndSucc: seq[Node] = newSeq[Node]()
+    for predNode in dg.predecessorIterator(node):
+        predAndSucc.add(predNode)
+    for succNode in dg.successorIterator(node):
+        predAndSucc.add(succNode)
+    return iterator: Node =
+        for node in predAndSucc:
+            yield node
+
+proc nonNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
+    var nbrs = initHashSet[Node]()
+    nbrs.incl(node)
+    for nbr in dg.neighborIterator(node):
+        nbrs.incl(nbr)
+    var nonNbrs = dg.nodeSet() - nbrs
+    return iterator: Node =
+        for nonNbr in nonNbrs:
+            yield nonNbr
+
+proc nonEdges(dg: DirectedGraph): iterator: Edge =
+    if dg.isDirected:
+        var ret: seq[Edge] = newSeq[Edge]()
+        for u in dg.nodes():
+            for v in dg.nonNeighbors(u):
+                ret.add((u, v))
+        return iterator: Edge =
+            for edge in ret:
+                yield edge
+    else:
+        var nodes = dg.nodeSet()
+        var ret: seq[Edge] = newSeq[Edge]()
+        while len(nodes) != 0:
+            var u = nodes.pop()
+            for v in nodes - dg.neighborSet(u):
+                ret.add((u, v))
+        return iterator: Edge =
+            for edge in ret:
+                yield edge
+
+proc selfloopEdges(dg: DirectedGraph): iterator: Edge =
+    var ret: seq[Edge] = newSeq[Edge]()
+    for edge in dg.edges():
+        if edge.u == edge.v:
+            ret.add(edge)
+    return iterator: Edge =
+        for edge in ret:
+            yield edge
+
+proc numberOfSelfloop(dg: DirectedGraph): int =
+    var ret = 0
+    for edge in dg.edges():
+        if edge.u == edge.v:
+            ret += 1
+    return ret
+
+proc nodesWithSelfloop(dg: DirectedGraph): iterator: Node =
+    var ret: seq[Node] = newSeq[Node]()
+    for edge in dg.edges():
+        if edge.u == edge.v:
+            ret.add(edge.u)
+    return iterator: Node =
+        for node in ret:
+            yield node
+
+proc isPath(dg: DirectedGraph, path: seq[Node]): bool =
+    if len(path) == 0 or len(path) == 1:
+        return true
+    for i in 0..<len(path)-1:
+        var n = path[i]
+        var nn = path[i+1]
+        if nn notin dg.neighborSet(n):
+            return false
+    return true
+
+# TODO:
+# proc `$`*(dg: DirectedGraph): string =
 
 proc `+`*(dg: DirectedGraph, node: Node): DirectedGraph =
     dg.addNode(node)
