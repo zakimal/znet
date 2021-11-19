@@ -44,7 +44,7 @@ iterator genericBfsEdges*(
                     queue.addLast((child, depthNow - 1, neighborsUsing[](child)))
         discard queue.popFirst()
 
-iterator bfsEdges(
+iterator bfsEdges*(
     g: Graph,
     source: Node,
     reverse: bool = false,
@@ -61,7 +61,7 @@ iterator bfsEdges(
     for edge in genericBfsEdges(g, source, successors, depthLimit, sortNeighbors):
         yield edge
 
-proc bfsTree(
+proc bfsTree*(
     g: Graph,
     source: Node,
     reverse: bool = false,
@@ -80,7 +80,7 @@ proc bfsTree(
         T.addEdge(edge)
     return T
 
-iterator bfsPredecessors(
+iterator bfsPredecessors*(
     g: Graph,
     source: Node,
     depthLimit: int = -1,
@@ -94,7 +94,7 @@ iterator bfsPredecessors(
     ):
         yield (t, s)
 
-iterator bfsSuccessors(
+iterator bfsSuccessors*(
     g: Graph,
     source: Node,
     depthLimit: int = -1,
@@ -117,7 +117,7 @@ iterator bfsSuccessors(
     yield (parent, children)
 
 
-proc descendantsAtDistance(
+proc descendantsAtDistance*(
     g: Graph,
     source: Node,
     distance: int
