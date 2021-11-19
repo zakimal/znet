@@ -19,7 +19,7 @@ type
     ZNetPowerIterationFailedConvergence* = ref object of ZNetExceededMaxIterations
         numIterations: int
 
-proc initZNetPowerIterationFailedConvergence*(numIterations: int): ZNetPowerIterationFailedConvergence =
+proc newZNetPowerIterationFailedConvergence*(numIterations: int): ZNetPowerIterationFailedConvergence =
     var e: ZNetPowerIterationFailedConvergence
     new(e)
     e.numIterations = numIterations

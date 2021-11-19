@@ -1,68 +1,390 @@
-[ ] approximation
-[ ] assortativity
-[ ] bipartite
-[ ] centrality
-[ ] coloring
-[ ] community
-[ ] components
-[ ] connectivity
-[ ] flow
-[ ] isomorphism
-[ ] link_analysis
-[ ] minors
-[ ] node_classification
-[ ] operators
-[ ] shortest_paths
-[ ] tests
-[ ] traversal
-[ ] tree
-[ ] asteroidal.py
-[ ] boundary.py
-[ ] bridges.py
-[ ] chains.py
-[ ] chordal.py
-[ ] clique.py
-[ ] cluster.py
-[ ] communicability_alg.py
-[ ] core.py
-[ ] covering.py
-[ ] cuts.py
-[ ] cycles.py
-[ ] d_separation.py
-[ ] dag.py
-[ ] distance_measures.py
-[ ] distance_regular.py
-[ ] dominance.py
-[ ] dominating.py
-[ ] efficiency_measures.py
-[ ] euler.py
-[ ] graph_hashing.py
-[ ] graphical.py
-[ ] hierarchy.py
-[ ] hybrid.py
-[ ] isolate.py
-[ ] link_prediction.py
-[ ] lowest_common_ancestors.py
-[ ] matching.py
-[ ] mis.py
-[ ] moral.py
-[ ] non_randomness.py
-[ ] planar_drawing.py
-[ ] planarity.py
-[ ] reciprocity.py
-[ ] regular.py
-[ ] richclub.py
-[ ] similarity.py
-[ ] simple_paths.py
-[ ] smallworld.py
-[ ] smetric.py
-[ ] sparsifiers.py
-[ ] structuralholes.py
-[ ] summarization.py
-[ ] swap.py
-[ ] threshold.py
-[ ] tournament.py
-[ ] triads.py
-[ ] vitality.py
-[ ] voronoi.py
-[ ] wiener.py
+Approximations and Heuristics
+    Connectivity
+    K-components
+    Clique
+    Clustering
+    Distance Measures
+    Dominating Set
+    Matching
+    Ramsey
+    Steiner Tree
+    Traveling Salesman
+    Treewidth
+    Vertex Cover
+    Max Cut
+Assortativity
+    Assortativity
+    Average neighbor degree
+    Average degree connectivity
+    Mixing
+    Pairs
+Asteroidal
+    networkx.algorithms.asteroidal.is_at_free
+    networkx.algorithms.asteroidal.find_asteroidal_triple
+Bipartite
+    Basic functions
+    Edgelist
+    Matching
+    Matrix
+    Projections
+    Spectral
+    Clustering
+    Redundancy
+    Centrality
+    Generators
+    Covering
+Boundary
+    networkx.algorithms.boundary.edge_boundary
+    networkx.algorithms.boundary.node_boundary
+Bridges
+    networkx.algorithms.bridges.bridges
+    networkx.algorithms.bridges.has_bridges
+    networkx.algorithms.bridges.local_bridges
+Centrality
+    Degree
+    Eigenvector
+    Closeness
+    Current Flow Closeness
+    (Shortest Path) Betweenness
+    Current Flow Betweenness
+    Communicability Betweenness
+    Group Centrality
+    Load
+    Subgraph
+    Harmonic Centrality
+    Dispersion
+    Reaching
+    Percolation
+    Second Order Centrality
+    Trophic
+    VoteRank
+Chains
+    networkx.algorithms.chains.chain_decomposition
+Chordal
+    networkx.algorithms.chordal.is_chordal
+    networkx.algorithms.chordal.chordal_graph_cliques
+    networkx.algorithms.chordal.chordal_graph_treewidth
+    networkx.algorithms.chordal.complete_to_chordal_graph
+    networkx.algorithms.chordal.find_induced_nodes
+Clique
+    networkx.algorithms.clique.enumerate_all_cliques
+    networkx.algorithms.clique.find_cliques
+    networkx.algorithms.clique.make_max_clique_graph
+    networkx.algorithms.clique.make_clique_bipartite
+    networkx.algorithms.clique.graph_clique_number
+    networkx.algorithms.clique.graph_number_of_cliques
+    networkx.algorithms.clique.node_clique_number
+    networkx.algorithms.clique.number_of_cliques
+    networkx.algorithms.clique.cliques_containing_node
+    networkx.algorithms.clique.max_weight_clique
+Clustering
+    networkx.algorithms.cluster.triangles
+    networkx.algorithms.cluster.transitivity
+    networkx.algorithms.cluster.clustering
+    networkx.algorithms.cluster.average_clustering
+    networkx.algorithms.cluster.square_clustering
+    networkx.algorithms.cluster.generalized_degree
+Coloring
+    networkx.algorithms.coloring.greedy_color
+    networkx.algorithms.coloring.equitable_color
+    networkx.algorithms.coloring.strategy_connected_sequential
+    networkx.algorithms.coloring.strategy_connected_sequential_dfs
+    networkx.algorithms.coloring.strategy_connected_sequential_bfs
+    networkx.algorithms.coloring.strategy_independent_set
+    networkx.algorithms.coloring.strategy_largest_first
+    networkx.algorithms.coloring.strategy_random_sequential
+    networkx.algorithms.coloring.strategy_saturation_largest_first
+    networkx.algorithms.coloring.strategy_smallest_last
+Communicability
+    networkx.algorithms.communicability_alg.communicability
+    networkx.algorithms.communicability_alg.communicability_exp
+Communities
+    Bipartitions
+    K-Clique
+    Modularity-based communities
+    Tree partitioning
+    Label propagation
+    Fluid Communities
+    Measuring partitions
+    Partitions via centrality measures
+    Validating partitions
+Components
+    Connectivity
+    Strong connectivity
+    Weak connectivity
+    Attracting components
+    Biconnected components
+    Semiconnectedness
+Connectivity
+    Edge-augmentation
+    K-edge-components
+    K-node-components
+    K-node-cutsets
+    Flow-based disjoint paths
+    Flow-based Connectivity
+    Flow-based Minimum Cuts
+    Stoer-Wagner minimum cut
+    Utils for flow-based connectivity
+Cores
+    networkx.algorithms.core.core_number
+    networkx.algorithms.core.k_core
+    networkx.algorithms.core.k_shell
+    networkx.algorithms.core.k_crust
+    networkx.algorithms.core.k_corona
+    networkx.algorithms.core.k_truss
+    networkx.algorithms.core.onion_layers
+Covering
+    networkx.algorithms.covering.min_edge_cover
+    networkx.algorithms.covering.is_edge_cover
+Cycles
+    networkx.algorithms.cycles.cycle_basis
+    networkx.algorithms.cycles.simple_cycles
+    networkx.algorithms.cycles.find_cycle
+    networkx.algorithms.cycles.minimum_cycle_basis
+Cuts
+    networkx.algorithms.cuts.boundary_expansion
+    networkx.algorithms.cuts.conductance
+    networkx.algorithms.cuts.cut_size
+    networkx.algorithms.cuts.edge_expansion
+    networkx.algorithms.cuts.mixing_expansion
+    networkx.algorithms.cuts.node_expansion
+    networkx.algorithms.cuts.normalized_cut_size
+    networkx.algorithms.cuts.volume
+D-Separation
+    Examples
+    References
+    networkx.algorithms.d_separation.d_separated
+Directed Acyclic Graphs
+    networkx.algorithms.dag.ancestors
+    networkx.algorithms.dag.descendants
+    networkx.algorithms.dag.topological_sort
+    networkx.algorithms.dag.topological_generations
+    networkx.algorithms.dag.all_topological_sorts
+    networkx.algorithms.dag.lexicographical_topological_sort
+    networkx.algorithms.dag.is_directed_acyclic_graph
+    networkx.algorithms.dag.is_aperiodic
+    networkx.algorithms.dag.transitive_closure
+    networkx.algorithms.dag.transitive_closure_dag
+    networkx.algorithms.dag.transitive_reduction
+    networkx.algorithms.dag.antichains
+    networkx.algorithms.dag.dag_longest_path
+    networkx.algorithms.dag.dag_longest_path_length
+    networkx.algorithms.dag.dag_to_branching
+Distance Measures
+    networkx.algorithms.distance_measures.barycenter
+    networkx.algorithms.distance_measures.center
+    networkx.algorithms.distance_measures.diameter
+    networkx.algorithms.distance_measures.eccentricity
+    networkx.algorithms.distance_measures.extrema_bounding
+    networkx.algorithms.distance_measures.periphery
+    networkx.algorithms.distance_measures.radius
+    networkx.algorithms.distance_measures.resistance_distance
+Distance-Regular Graphs
+    networkx.algorithms.distance_regular.is_distance_regular
+    networkx.algorithms.distance_regular.is_strongly_regular
+    networkx.algorithms.distance_regular.intersection_array
+    networkx.algorithms.distance_regular.global_parameters
+Dominance
+    networkx.algorithms.dominance.immediate_dominators
+    networkx.algorithms.dominance.dominance_frontiers
+Dominating Sets
+    networkx.algorithms.dominating.dominating_set
+    networkx.algorithms.dominating.is_dominating_set
+Efficiency
+    networkx.algorithms.efficiency_measures.efficiency
+    networkx.algorithms.efficiency_measures.local_efficiency
+    networkx.algorithms.efficiency_measures.global_efficiency
+Eulerian
+    networkx.algorithms.euler.is_eulerian
+    networkx.algorithms.euler.eulerian_circuit
+    networkx.algorithms.euler.eulerize
+    networkx.algorithms.euler.is_semieulerian
+    networkx.algorithms.euler.has_eulerian_path
+    networkx.algorithms.euler.eulerian_path
+Flows
+    Maximum Flow
+    Edmonds-Karp
+    Shortest Augmenting Path
+    Preflow-Push
+    Dinitz
+    Boykov-Kolmogorov
+    Gomory-Hu Tree
+    Utils
+    Network Simplex
+    Capacity Scaling Minimum Cost Flow
+Graph Hashing
+    networkx.algorithms.graph_hashing.weisfeiler_lehman_graph_hash
+Graphical degree sequence
+    networkx.algorithms.graphical.is_graphical
+    networkx.algorithms.graphical.is_digraphical
+    networkx.algorithms.graphical.is_multigraphical
+    networkx.algorithms.graphical.is_pseudographical
+    networkx.algorithms.graphical.is_valid_degree_sequence_havel_hakimi
+    networkx.algorithms.graphical.is_valid_degree_sequence_erdos_gallai
+Hierarchy
+    networkx.algorithms.hierarchy.flow_hierarchy
+Hybrid
+    networkx.algorithms.hybrid.kl_connected_subgraph
+    networkx.algorithms.hybrid.is_kl_connected
+Isolates
+    networkx.algorithms.isolate.is_isolate
+    networkx.algorithms.isolate.isolates
+    networkx.algorithms.isolate.number_of_isolates
+Isomorphism
+    networkx.algorithms.isomorphism.is_isomorphic
+    networkx.algorithms.isomorphism.could_be_isomorphic
+    networkx.algorithms.isomorphism.fast_could_be_isomorphic
+    networkx.algorithms.isomorphism.faster_could_be_isomorphic
+    Tree Isomorphism
+    Advanced Interfaces
+Link Analysis
+    PageRank
+    Hits
+Link Prediction
+    networkx.algorithms.link_prediction.resource_allocation_index
+    networkx.algorithms.link_prediction.jaccard_coefficient
+    networkx.algorithms.link_prediction.adamic_adar_index
+    networkx.algorithms.link_prediction.preferential_attachment
+    networkx.algorithms.link_prediction.cn_soundarajan_hopcroft
+    networkx.algorithms.link_prediction.ra_index_soundarajan_hopcroft
+    networkx.algorithms.link_prediction.within_inter_cluster
+    networkx.algorithms.link_prediction.common_neighbor_centrality
+Lowest Common Ancestor
+    networkx.algorithms.lowest_common_ancestors.all_pairs_lowest_common_ancestor
+    networkx.algorithms.lowest_common_ancestors.tree_all_pairs_lowest_common_ancestor
+    networkx.algorithms.lowest_common_ancestors.lowest_common_ancestor
+Matching
+    networkx.algorithms.matching.is_matching
+    networkx.algorithms.matching.is_maximal_matching
+    networkx.algorithms.matching.is_perfect_matching
+    networkx.algorithms.matching.maximal_matching
+    networkx.algorithms.matching.max_weight_matching
+    networkx.algorithms.matching.min_weight_matching
+Minors
+    References
+    networkx.algorithms.minors.contracted_edge
+    networkx.algorithms.minors.contracted_nodes
+    networkx.algorithms.minors.identified_nodes
+    networkx.algorithms.minors.equivalence_classes
+    networkx.algorithms.minors.quotient_graph
+Maximal independent set
+    networkx.algorithms.mis.maximal_independent_set
+non-randomness
+    networkx.algorithms.non_randomness.non_randomness
+Moral
+    networkx.algorithms.moral.moral_graph
+Node Classification
+    Harmonic Function
+    Local and Global Consistency
+Operators
+    networkx.algorithms.operators.unary.complement
+    networkx.algorithms.operators.unary.reverse
+    networkx.algorithms.operators.binary.compose
+    networkx.algorithms.operators.binary.union
+    networkx.algorithms.operators.binary.disjoint_union
+    networkx.algorithms.operators.binary.intersection
+    networkx.algorithms.operators.binary.difference
+    networkx.algorithms.operators.binary.symmetric_difference
+    networkx.algorithms.operators.binary.full_join
+    networkx.algorithms.operators.all.compose_all
+    networkx.algorithms.operators.all.union_all
+    networkx.algorithms.operators.all.disjoint_union_all
+    networkx.algorithms.operators.all.intersection_all
+    networkx.algorithms.operators.product.cartesian_product
+    networkx.algorithms.operators.product.lexicographic_product
+    networkx.algorithms.operators.product.rooted_product
+    networkx.algorithms.operators.product.strong_product
+    networkx.algorithms.operators.product.tensor_product
+    networkx.algorithms.operators.product.power
+Planarity
+    networkx.algorithms.planarity.check_planarity
+Planar Drawing
+    networkx.algorithms.planar_drawing.combinatorial_embedding_to_pos
+Reciprocity
+    networkx.algorithms.reciprocity.reciprocity
+    networkx.algorithms.reciprocity.overall_reciprocity
+Regular
+    networkx.algorithms.regular.is_regular
+    networkx.algorithms.regular.is_k_regular
+    networkx.algorithms.regular.k_factor
+Rich Club
+    networkx.algorithms.richclub.rich_club_coefficient
+Shortest Paths
+    networkx.algorithms.shortest_paths.generic.shortest_path
+    networkx.algorithms.shortest_paths.generic.all_shortest_paths
+    networkx.algorithms.shortest_paths.generic.shortest_path_length
+    networkx.algorithms.shortest_paths.generic.average_shortest_path_length
+    networkx.algorithms.shortest_paths.generic.has_path
+    Advanced Interface
+    Dense Graphs
+    A* Algorithm
+Similarity Measures
+    networkx.algorithms.similarity.graph_edit_distance
+    networkx.algorithms.similarity.optimal_edit_paths
+    networkx.algorithms.similarity.optimize_graph_edit_distance
+    networkx.algorithms.similarity.optimize_edit_paths
+    networkx.algorithms.similarity.simrank_similarity
+    networkx.algorithms.similarity.simrank_similarity_numpy
+    networkx.algorithms.similarity.panther_similarity
+    networkx.algorithms.similarity.generate_random_paths
+Simple Paths
+    networkx.algorithms.simple_paths.all_simple_paths
+    networkx.algorithms.simple_paths.all_simple_edge_paths
+    networkx.algorithms.simple_paths.is_simple_path
+    networkx.algorithms.simple_paths.shortest_simple_paths
+Small-world
+    networkx.algorithms.smallworld.random_reference
+    networkx.algorithms.smallworld.lattice_reference
+    networkx.algorithms.smallworld.sigma
+    networkx.algorithms.smallworld.omega
+s metric
+    networkx.algorithms.smetric.s_metric
+Sparsifiers
+    networkx.algorithms.sparsifiers.spanner
+Structural holes
+    networkx.algorithms.structuralholes.constraint
+    networkx.algorithms.structuralholes.effective_size
+    networkx.algorithms.structuralholes.local_constraint
+Summarization
+    networkx.algorithms.summarization.dedensify
+    networkx.algorithms.summarization.snap_aggregation
+Swap
+    networkx.algorithms.swap.double_edge_swap
+    networkx.algorithms.swap.connected_double_edge_swap
+Threshold Graphs
+    networkx.algorithms.threshold.find_threshold_graph
+    networkx.algorithms.threshold.is_threshold_graph
+Tournament
+    networkx.algorithms.tournament.hamiltonian_path
+    networkx.algorithms.tournament.is_reachable
+    networkx.algorithms.tournament.is_strongly_connected
+    networkx.algorithms.tournament.is_tournament
+    networkx.algorithms.tournament.random_tournament
+    networkx.algorithms.tournament.score_sequence
+Traversal
+    Depth First Search
+    Breadth First Search
+    Beam search
+    Depth First Search on Edges
+    Breadth First Search on Edges
+Tree
+    Recognition
+    Branchings and Spanning Arborescences
+    Encoding and decoding
+    Operations
+    Spanning Trees
+    Decomposition
+    Exceptions
+Triads
+    networkx.algorithms.triads.triadic_census
+    networkx.algorithms.triads.random_triad
+    networkx.algorithms.triads.triads_by_type
+    networkx.algorithms.triads.triad_type
+    networkx.algorithms.triads.all_triads
+    networkx.algorithms.triads.all_triplets
+Vitality
+    networkx.algorithms.vitality.closeness_vitality
+Voronoi cells
+    networkx.algorithms.voronoi.voronoi_cells
+Wiener index
+    networkx.algorithms.wiener.wiener_index
