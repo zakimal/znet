@@ -41,8 +41,8 @@ Bridges
     networkx.algorithms.bridges.has_bridges
     networkx.algorithms.bridges.local_bridges
 Centrality
-    Degree
-    Eigenvector
+    [x] Degree
+    [x] Eigenvector
     Closeness
     Current Flow Closeness
     (Shortest Path) Betweenness
