@@ -119,7 +119,7 @@ when isMainModule:
             33: 0.5151515151515151
         }.toTable()
     for (node, val) in ret0.pairs():
-        if val != nxRet0[node]:
+        if 1e-15 < abs(val - nxRet0[node]):
             echo(fmt"node {node}: got {val}, expected {nxRet0[node]}")
             echo(fmt"diff={val - nxRet0[node]}")
 
@@ -164,7 +164,7 @@ when isMainModule:
             26: 0.06060606060606061
         }.toTable()
     for (node, val) in ret1.pairs():
-        if val != nxRet1[node]:
+        if 1e-15 < abs(val - nxRet1[node]):
             echo(fmt"node {node}: got {val}, expected {nxRet1[node]}")
             echo(fmt"diff={val - nxRet1[node]}")
 
@@ -207,7 +207,7 @@ when isMainModule:
             26: 0.0
         }.toTable()
     for (node, val) in ret2.pairs():
-        if val != nxRet2[node]:
+        if 1e-15 < abs(val - nxRet2[node]):
             echo(fmt"node {node}: got {val}, expected {nxRet2[node]}")
             echo(fmt"diff={val - nxRet2[node]}")
 
@@ -250,6 +250,6 @@ when isMainModule:
             26: 0.06060606060606061
         }.toTable()
     for (node, val) in ret3.pairs():
-        if val != nxRet3[node]:
+        if 1e-15 < abs(val - nxRet3[node]):
             echo(fmt"node {node}: got {val}, expected {nxRet3[node]}")
             echo(fmt"diff={val - nxRet3[node]}")

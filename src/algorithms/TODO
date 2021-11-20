@@ -362,8 +362,8 @@ Tournament
     networkx.algorithms.tournament.random_tournament
     networkx.algorithms.tournament.score_sequence
 Traversal
-    Depth First Search
-    Breadth First Search
+    [x] Depth First Search
+    [x] Breadth First Search
     Beam search
     Depth First Search on Edges
     Breadth First Search on Edges

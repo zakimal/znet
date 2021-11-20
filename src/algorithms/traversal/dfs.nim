@@ -1,11 +1,9 @@
-import strformat
 import sequtils
 import sets
 import deques
 import tables
 
 import ../../graph.nim
-import ../../exception.nim
 
 iterator dfsEdges*(
     g: Graph,

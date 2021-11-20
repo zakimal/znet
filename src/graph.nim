@@ -189,6 +189,31 @@ proc edgeSet*(g: Graph): HashSet[Edge] =
 proc edgeSeq*(g: Graph): seq[Edge] =
     return g.edges()
 
+proc edges*(g: Graph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for v in g.adj[node]:
+        ret.add((node, v))
+    ret.sort()
+    return ret
+
+proc edgeIterator*(g: Graph, node: Node): iterator: Edge =
+    return iterator: Edge =
+        for (u, v) in g.edges(node):
+            yield (u, v)
+
+proc edgeSet*(g: Graph, node: Node): HashSet[Edge] =
+    var ret = initHashSet[Edge]()
+    for v in g.adj[node]:
+        ret.incl((node, v))
+    return ret
+
+proc edgeSeq*(g: Graph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for v in g.adj[node]:
+        ret.add((node, v))
+    ret.sort()
+    return ret
+
 proc hasEdge*(g: Graph, u, v: Node): bool =
     try:
         return v in g.adj[u]
@@ -253,7 +278,8 @@ proc nbunchIter*(g: Graph): iterator: Node =
 proc nbunchIter*(g: Graph, nbunch: Node): iterator: Node =
     return iterator: Node =
         for node in @[nbunch]:
-            yield node
+            if node in g.nodeSet():
+                yield node
 
 proc nbunchIter*(g: Graph, nbunch: seq[Node]): iterator: Node =
     return iterator: Node =
@@ -404,10 +430,10 @@ proc addCycle*(g: Graph, nodes: seq[Node]) =
         g.addEdge(nodes[i], nodes[i+1])
     g.addEdge(nodes[0], nodes[^1])
 
-proc allNeighbors(g: Graph, node: Node): iterator: Node =
+proc allNeighbors*(g: Graph, node: Node): iterator: Node =
     return g.neighborIterator(node)
 
-proc nonNeighbors(g: Graph, node: Node): iterator: Node =
+proc nonNeighbors*(g: Graph, node: Node): iterator: Node =
     var nbrs = initHashSet[Node]()
     nbrs.incl(node)
     for nbr in g.neighborIterator(node):
@@ -417,7 +443,7 @@ proc nonNeighbors(g: Graph, node: Node): iterator: Node =
         for nonNbr in nonNbrs:
             yield nonNbr
 
-proc commonNeighbors(g: Graph, u, v: Node): iterator: Node =
+proc commonNeighbors*(g: Graph, u, v: Node): iterator: Node =
     if g.isDirected:
         var e = ZNetError()
         e.msg = "Not implemented for directed graph"
@@ -435,7 +461,7 @@ proc commonNeighbors(g: Graph, u, v: Node): iterator: Node =
         for commonNbr in commonNbrs:
             yield commonNbr
 
-proc nonEdges(g: Graph): iterator: Edge =
+proc nonEdges*(g: Graph): iterator: Edge =
     if g.isDirected:
         var ret: seq[Edge] = newSeq[Edge]()
         for u in g.nodes():
@@ -455,7 +481,7 @@ proc nonEdges(g: Graph): iterator: Edge =
             for edge in ret:
                 yield edge
 
-proc selfloopEdges(g: Graph): iterator: Edge =
+proc selfloopEdges*(g: Graph): iterator: Edge =
     var ret: seq[Edge] = newSeq[Edge]()
     for edge in g.edges():
         if edge.u == edge.v:
@@ -464,14 +490,14 @@ proc selfloopEdges(g: Graph): iterator: Edge =
         for edge in ret:
             yield edge
 
-proc numberOfSelfloop(g: Graph): int =
+proc numberOfSelfloop*(g: Graph): int =
     var ret = 0
     for edge in g.edges():
         if edge.u == edge.v:
             ret += 1
     return ret
 
-proc nodesWithSelfloop(g: Graph): iterator: Node =
+proc nodesWithSelfloop*(g: Graph): iterator: Node =
     var ret: seq[Node] = newSeq[Node]()
     for edge in g.edges():
         if edge.u == edge.v:
@@ -480,7 +506,7 @@ proc nodesWithSelfloop(g: Graph): iterator: Node =
         for node in ret:
             yield node
 
-proc isPath(g: Graph, path: seq[Node]): bool =
+proc isPath*(g: Graph, path: seq[Node]): bool =
     if len(path) == 0 or len(path) == 1:
         return true
     for i in 0..<len(path)-1:
@@ -716,17 +742,126 @@ proc edges*(dg: DirectedGraph): seq[Edge] =
     ret.sort()
     return ret
 
-proc outEdges*(dg: DirectedGraph): seq[Edge] =
-    return dg.edges()
-
-proc inEdges*(dg: DirectedGraph): seq[Edge] =
-    return dg.edges()
+proc edgeIterator*(dg: DirectedGraph): iterator: Edge =
+    return iterator: Edge =
+        for (u, v) in dg.edges():
+            yield (u, v)
 
 proc edgeSet*(dg: DirectedGraph): HashSet[Edge] =
     var ret = initHashSet[Edge]()
     for (u, vs) in dg.adj.pairs():
         for v in vs:
             ret.incl((u, v))
+    return ret
+
+proc edgeSeq*(dg: DirectedGraph): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for (u, vs) in dg.adj.pairs():
+        for v in vs:
+            ret.add((u, v))
+    ret.sort()
+    return ret
+
+proc edges*(dg: DirectedGraph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for v in dg.adj[node]:
+        ret.add((node, v))
+    ret.sort()
+    return ret
+
+proc edgeIterator*(dg: DirectedGraph, node: Node): iterator: Edge =
+    return iterator: Edge =
+        for edge in dg.edges(node):
+            yield edge
+
+proc edgeSet*(dg: DirectedGraph, node: Node): HashSet[Edge] =
+    var ret = initHashSet[Edge]()
+    for edge in dg.edges(node):
+        ret.incl(edge)
+    return ret
+
+proc edgeSeq*(dg: DirectedGraph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for edge in dg.edges(node):
+        ret.add(edge)
+    ret.sort()
+    return ret
+
+proc outEdges*(dg: DirectedGraph): seq[Edge] =
+    return dg.edges()
+
+proc outEdgeIterator*(dg: DirectedGraph): iterator: Edge =
+    return dg.edgeIterator()
+
+proc outEdgeSet*(dg: DirectedGraph): HashSet[Edge] =
+    return dg.edgeSet()
+
+proc outEdgeSeq*(dg: DirectedGraph): seq[Edge] =
+    return dg.edgeSeq()
+
+proc outEdges*(dg: DirectedGraph, node: Node): seq[Edge] =
+    return dg.edges(node)
+
+proc outEdgeIterator*(dg: DirectedGraph, node: Node): iterator: Edge =
+    return dg.edgeIterator(node)
+
+proc outEdgeSet*(dg: DirectedGraph, node: Node): HashSet[Edge] =
+    return dg.outEdgeSet(node)
+
+proc outEdgeSeq*(dg: DirectedGraph, node: Node): seq[Edge] =
+    return dg.outEdgeSeq(node)
+
+proc inEdges*(dg: DirectedGraph): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for (u, vs) in dg.pred.pairs():
+        for v in vs:
+            ret.add((u, v))
+    ret.sort()
+    return ret
+
+proc inEdgeIterator*(dg: DirectedGraph): iterator: Edge =
+    return iterator: Edge =
+        for (u, v) in dg.inEdges():
+            yield (u, v)
+
+proc inEdgeSet*(dg: DirectedGraph): HashSet[Edge] =
+    var ret = initHashSet[Edge]()
+    for (u, vs) in dg.pred.pairs():
+        for v in vs:
+            ret.incl((u, v))
+    return ret
+
+proc inEdgeSeq*(dg: DirectedGraph): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for (u, vs) in dg.pred.pairs():
+        for v in vs:
+            ret.add((u, v))
+    ret.sort()
+    return ret
+
+proc inEdges*(dg: DirectedGraph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for v in dg.pred[node]:
+        ret.add((node, v))
+    ret.sort()
+    return ret
+
+proc inEdgeIterator*(dg: DirectedGraph, node: Node): iterator: Edge =
+    return iterator: Edge =
+        for inEdge in dg.inEdges(node):
+            yield inEdge
+
+proc inEdgeSet*(dg: DirectedGraph, node: Node): HashSet[Edge] =
+    var ret = initHashSet[Edge]()
+    for v in dg.pred[node]:
+        ret.incl((node, v))
+    return ret
+
+proc inEdgeSeq*(dg: DirectedGraph, node: Node): seq[Edge] =
+    var ret = newSeq[Edge]()
+    for v in dg.pred[node]:
+        ret.add((node, v))
+    ret.sort()
     return ret
 
 proc neighbors*(dg: DirectedGraph, n: Node): seq[Node] =
@@ -945,7 +1080,7 @@ proc addCycle*(dg: DirectedGraph, nodes: seq[Node]) =
         dg.addEdge(nodes[i], nodes[i+1])
     dg.addEdge(nodes[0], nodes[^1])
 
-proc allNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
+proc allNeighbors*(dg: DirectedGraph, node: Node): iterator: Node =
     var predAndSucc: seq[Node] = newSeq[Node]()
     for predNode in dg.predecessorIterator(node):
         predAndSucc.add(predNode)
@@ -955,7 +1090,7 @@ proc allNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
         for node in predAndSucc:
             yield node
 
-proc nonNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
+proc nonNeighbors*(dg: DirectedGraph, node: Node): iterator: Node =
     var nbrs = initHashSet[Node]()
     nbrs.incl(node)
     for nbr in dg.neighborIterator(node):
@@ -965,7 +1100,7 @@ proc nonNeighbors(dg: DirectedGraph, node: Node): iterator: Node =
         for nonNbr in nonNbrs:
             yield nonNbr
 
-proc nonEdges(dg: DirectedGraph): iterator: Edge =
+proc nonEdges*(dg: DirectedGraph): iterator: Edge =
     if dg.isDirected:
         var ret: seq[Edge] = newSeq[Edge]()
         for u in dg.nodes():
@@ -994,14 +1129,14 @@ proc selfloopEdges(dg: DirectedGraph): iterator: Edge =
         for edge in ret:
             yield edge
 
-proc numberOfSelfloop(dg: DirectedGraph): int =
+proc numberOfSelfloop*(dg: DirectedGraph): int =
     var ret = 0
     for edge in dg.edges():
         if edge.u == edge.v:
             ret += 1
     return ret
 
-proc nodesWithSelfloop(dg: DirectedGraph): iterator: Node =
+proc nodesWithSelfloop*(dg: DirectedGraph): iterator: Node =
     var ret: seq[Node] = newSeq[Node]()
     for edge in dg.edges():
         if edge.u == edge.v:
@@ -1010,7 +1145,7 @@ proc nodesWithSelfloop(dg: DirectedGraph): iterator: Node =
         for node in ret:
             yield node
 
-proc isPath(dg: DirectedGraph, path: seq[Node]): bool =
+proc isPath*(dg: DirectedGraph, path: seq[Node]): bool =
     if len(path) == 0 or len(path) == 1:
         return true
     for i in 0..<len(path)-1:
