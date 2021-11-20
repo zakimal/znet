@@ -54,8 +54,7 @@ proc pagerank(
         if dg.outdegree(node) == 0:
             danglingNodes.add(node)
 
-    var currentIter: int = 0
-    while currentIter < maxIter:
+    for i in 0..<maxIter:
         var xlast = x;
         x = initTable[Node, float]()
         for key in xlast.keys():
@@ -76,9 +75,7 @@ proc pagerank(
             err += abs(x[n] - xlast[n])
         if err < float(N) * tol:
             return x
-        else:
-            currentIter += 1
-    return x
+    raise newZNetPowerIterationFailedConvergence(maxIter)
 
 proc pagerank(
     g: Graph,
