@@ -4,7 +4,7 @@ import strformat
 import ../../graph.nim
 import ../../exception.nim
 
-proc pagerank(
+proc pagerank*(
     dg: DirectedGraph,
     alpha: float = 0.85,
     personalization: TableRef[Node, float] = nil,
@@ -77,7 +77,7 @@ proc pagerank(
             return x
     raise newZNetPowerIterationFailedConvergence(maxIter)
 
-proc pagerank(
+proc pagerank*(
     g: Graph,
     alpha: float = 0.85,
     personalization: TableRef[Node, float] = nil,

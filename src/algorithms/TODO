@@ -238,8 +238,8 @@ Isomorphism
     Tree Isomorphism
     Advanced Interfaces
 Link Analysis
-    PageRank
-    Hits
+    [x] PageRank
+    [x] Hits
 Link Prediction
     networkx.algorithms.link_prediction.resource_allocation_index
     networkx.algorithms.link_prediction.jaccard_coefficient

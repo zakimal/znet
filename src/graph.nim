@@ -456,7 +456,10 @@ proc commonNeighbors*(g: Graph, u, v: Node): iterator: Node =
         var e = ZNetError()
         e.msg = fmt"The Node {v} is not in the graph"
         raise e
-    var commonNbrs = g.neighborSet(u) * g.neighborSet(v)
+    var commonNbrs = initHashSet[Node]()
+    for w in g.neighborSet(u):
+        if (w in g.neighborSet(v)) and (w notin {u, v}):
+            commonNbrs.incl(w)
     return iterator: Node =
         for commonNbr in commonNbrs:
             yield commonNbr

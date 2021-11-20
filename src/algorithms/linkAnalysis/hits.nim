@@ -4,7 +4,7 @@ import strformat
 import ../../graph.nim
 import ../../exception.nim
 
-proc hits(
+proc hits*(
     dg: DirectedGraph,
     maxIter: int = 100,
     tol: float = 1.0e-8,
@@ -77,7 +77,7 @@ proc hits(
 
 
 
-proc hits(
+proc hits*(
     g: Graph,
     maxIter: int = 100,
     tol: float = 1.0e-8,
