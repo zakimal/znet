@@ -17,11 +17,12 @@ iterator genericBfsEdges*(
     if sortNeighbors != nil:
         neighborsUsing[] = proc(node: Node): iterator: Node =
             return iterator: Node =
-                for nbr in neighbors[](node):
+                for nbr in sortNeighbors[](neighbors[](node).toSeq()):
                     yield nbr
     else:
-        neighborsUsing[] = proc(node: Node): iterator: Node =
-            return g.neighborIterator(node)
+        # neighborsUsing[] = proc(node: Node): iterator: Node =
+        #     return g.neighborIterator(node)
+        neighborsUsing[] = neighbors[]
 
     var visited: HashSet[Node] = initHashSet[Node]()
     visited.incl(source)

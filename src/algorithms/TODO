@@ -241,13 +241,13 @@ Link Analysis
     [x] PageRank
     [x] Hits
 Link Prediction
-    networkx.algorithms.link_prediction.resource_allocation_index
-    networkx.algorithms.link_prediction.jaccard_coefficient
-    networkx.algorithms.link_prediction.adamic_adar_index
-    networkx.algorithms.link_prediction.preferential_attachment
-    networkx.algorithms.link_prediction.cn_soundarajan_hopcroft
-    networkx.algorithms.link_prediction.ra_index_soundarajan_hopcroft
-    networkx.algorithms.link_prediction.within_inter_cluster
+    [x] networkx.algorithms.link_prediction.resource_allocation_index
+    [x] networkx.algorithms.link_prediction.jaccard_coefficient
+    [x] networkx.algorithms.link_prediction.adamic_adar_index
+    [x] networkx.algorithms.link_prediction.preferential_attachment
+    [x] networkx.algorithms.link_prediction.cn_soundarajan_hopcroft
+    [x] networkx.algorithms.link_prediction.ra_index_soundarajan_hopcroft
+    [x] networkx.algorithms.link_prediction.within_inter_cluster
     networkx.algorithms.link_prediction.common_neighbor_centrality
 Lowest Common Ancestor
     networkx.algorithms.lowest_common_ancestors.all_pairs_lowest_common_ancestor
