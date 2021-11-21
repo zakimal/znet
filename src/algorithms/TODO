@@ -237,7 +237,7 @@ Isomorphism
     networkx.algorithms.isomorphism.faster_could_be_isomorphic
     Tree Isomorphism
     Advanced Interfaces
-Link Analysis
+[x] Link Analysis
     [x] PageRank
     [x] Hits
 Link Prediction
@@ -316,7 +316,7 @@ Shortest Paths
     networkx.algorithms.shortest_paths.generic.average_shortest_path_length
     networkx.algorithms.shortest_paths.generic.has_path
     Advanced Interface
-    Dense Graphs
+    [x] Dense Graphs
     A* Algorithm
 Similarity Measures
     networkx.algorithms.similarity.graph_edit_distance
@@ -364,7 +364,7 @@ Tournament
 Traversal
     [x] Depth First Search
     [x] Breadth First Search
-    Beam search
+    [x] Beam search
     Depth First Search on Edges
     Breadth First Search on Edges
 Tree
