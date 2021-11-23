@@ -227,9 +227,9 @@ Hybrid
     networkx.algorithms.hybrid.kl_connected_subgraph
     networkx.algorithms.hybrid.is_kl_connected
 Isolates
-    networkx.algorithms.isolate.is_isolate
-    networkx.algorithms.isolate.isolates
-    networkx.algorithms.isolate.number_of_isolates
+    [x] networkx.algorithms.isolate.is_isolate
+    [x] networkx.algorithms.isolate.isolates
+    [x] networkx.algorithms.isolate.number_of_isolates
 Isomorphism
     networkx.algorithms.isomorphism.is_isomorphic
     networkx.algorithms.isomorphism.could_be_isomorphic
