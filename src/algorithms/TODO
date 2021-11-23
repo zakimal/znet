@@ -126,13 +126,13 @@ Connectivity
     Stoer-Wagner minimum cut
     Utils for flow-based connectivity
 Cores
-    networkx.algorithms.core.core_number
-    networkx.algorithms.core.k_core
-    networkx.algorithms.core.k_shell
-    networkx.algorithms.core.k_crust
-    networkx.algorithms.core.k_corona
-    networkx.algorithms.core.k_truss
-    networkx.algorithms.core.onion_layers
+    [x] networkx.algorithms.core.core_number
+    [x] networkx.algorithms.core.k_core
+    [x] networkx.algorithms.core.k_shell
+    [x] networkx.algorithms.core.k_crust
+    [x] networkx.algorithms.core.k_corona
+    [x] networkx.algorithms.core.k_truss
+    [x] networkx.algorithms.core.onion_layers
 Covering
     networkx.algorithms.covering.min_edge_cover
     networkx.algorithms.covering.is_edge_cover
