@@ -949,16 +949,16 @@ proc pred*(dg: DirectedGraph): Table[Node, HashSet[Node]] =
 proc degree*(dg: DirectedGraph): Table[Node, int] =
     var ret = initTable[Node, int]()
     for node in dg.nodeSeq():
-        ret[node] = dg.adj[node].len()
+        ret[node] = dg.adj[node].len() + dg.pred[node].len()
     return ret
 
 proc degree*(dg: DirectedGraph, node: Node): int =
-    return dg.adj[node].len()
+    return dg.adj[node].len() + dg.pred[node].len()
 
 proc degree*(dg: DirectedGraph, nbunch: seq[Node]): seq[tuple[node: Node, degree: int]] =
     var ret = newSeq[tuple[node: Node, degree: int]]()
     for node in dg.nodeSeq():
-        ret.add((node, dg.adj[node].len()))
+        ret.add((node, dg.adj[node].len() + dg.pred[node].len()))
     return ret
 
 proc indegree*(dg: DirectedGraph): Table[Node, int] =
